@@ -44,14 +44,10 @@ configure_build() {
    local dir=$1 builddir=$2
    cmake -S . -B "$builddir" -DCMAKE_BUILD_TYPE=Release \
          -DSPEEX_SRC_DIR="$PWD/$dir" $CMAKE_ARGS
-   # The B tree (baseline) has no RVV symbols: the kernel diff tests can
-   # only link against the A library, so restrict B to the used targets.
-   if [ "$dir" = "$A_DIR" ]; then
-      cmake --build "$builddir" -j
-   else
-      cmake --build "$builddir" -j --target speex speex_ab bench_e2e \
-            testenc testenc_wb testenc_uwb
-   fi
+   # 只编 A/B 都需要的用例目标。diff 内核测试要引用 libspeex 内部的 static 符号
+   # （pitch_gain_search_3tap_vq 等），交叉链接取不到，留到内核阶段按 target 单独编。
+   local targets="speex speex_ab bench_e2e testenc testenc_wb testenc_uwb"
+   cmake --build "$builddir" -j --target $targets
 }
 
 # Word splitting of RUNNER/CMAKE_ARGS is intentional.
