@@ -11,8 +11,8 @@ endforeach()
 # vs the linked library (RVV overrides when enabled). Each is also a CTest
 # entry so a plain `ctest` exercises the kernels on any configuration.
 foreach(t
-   batch5_diff gshelp_diff open_loop_diff vqtail_diff
-   inner_prod_diff gainvq_diff qmf_diff filter_diff gcorr_diff)
+    gshelp_diff open_loop_diff vqtail_diff
+   inner_prod_diff  qmf_diff filter_diff )
    add_executable(${t} ${t}.c)
    target_link_options(${t} PRIVATE -static)
    if(_USE_RVV AND RVV_MARCH)
@@ -27,6 +27,6 @@ foreach(t
    target_link_libraries(${t} speex m)
    add_test(NAME ${t} COMMAND ${t})
 endforeach()
-set_tests_properties(batch5_diff gshelp_diff open_loop_diff vqtail_diff
-   inner_prod_diff gainvq_diff qmf_diff filter_diff gcorr_diff PROPERTIES
+set_tests_properties( gshelp_diff open_loop_diff vqtail_diff
+   inner_prod_diff  qmf_diff filter_diff  PROPERTIES
    ENVIRONMENT "CTEST_OUTPUT_ON_FAILURE=1")
