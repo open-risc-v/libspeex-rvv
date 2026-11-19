@@ -1048,3 +1048,43 @@ sumsq 内核(7.3%)、lsp_to_lpc 行循环(已 i64 化)、iir_mem16
 - **skill 更新**:本次 session 六类教训写入
   skills/rvv-optimization-loop/SKILL.md(构建卫生、测量优先、
   形状级优化、伪串行链、语义陷阱三则、工具链解锁条件登记)。
+
+## 第 34 轮(2026-11-19,迁移后真机复测 + A/B 口径修正)
+
+设备/工具链换成迁移后的新环境(gcc 15.2,原生 rv64gcv),R32 构建的源码不在
+本仓库(仓库 `src/libspeex/rvv/` 只有 8 个头,缺 `qmf_decomp/synth`、`multicomb`
+尾部、`compute_rms16`、`pitch_gain_search_3tap_vq`),因此本轮是"第 11 轮前后
+形态"的复测,口径同时修正。
+
+### 口径事故与修正
+
+早前一轮把"`-march=rv64gcv` 编上游 `baseline/`"当成 A 档,量出 0.24x —— 那是
+gcc 自动向量化的事故,不是移植成果。正确口径:
+
+- A = `src/` + `-D_USE_RVV=ON -DRVV_KERNELS=ON -DRVV_MARCH=rv64gcv`;
+- B = `baseline/` + `-O2 -march=rv64gc`;
+- 门禁 `CMAKE_ARGS='-D_USE_RVV=ON -DRVV_KERNELS=ON' bash test/run_ab.sh`。
+
+### 复测(gcc 15.2,bench_e2e 4s/reps=5)
+
+| 模式 | 质量 | A 编码 us/帧 | B 编码 | 编码加速 | A 解码 | B 解码 | 解码加速 |
+|---|---|---|---|---|---|---|---|
+| nb | 2 | 69.07 | 101.69 | 1.47x | 15.72 | 14.96 | 0.95x |
+| nb | 8 | 92.24 | 147.43 | 1.60x | 16.34 | 15.52 | 0.96x |
+| wb | 2 | 94.26 | 135.25 | 1.44x | 23.51 | 35.59 | 1.51x |
+| wb | 8 | 174.77 | 384.66 | 2.20x | 25.48 | 37.73 | 1.48x |
+| uwb | 2 | 129.03 | 196.50 | 1.52x | 35.88 | 74.77 | 2.08x |
+| uwb | 8 | 208.39 | 440.31 | 2.11x | 37.62 | 76.16 | 2.03x |
+
+bit-exact:六档(含交叉解码)**ALL PASS**。
+
+### 与 R32 的 2.6-2.8x 差距
+
+缺的是内核文件本身,不是编译开关。按本日志第 8/10/11/13/29-32 轮逐项补回后
+可望回到 enc -50%~-64%。待补顺序:qmf_decomp → compute_rms16 → multicomb 尾部
+→ pitch_gain_search_3tap_vq → qmf_synth(调度驱动版)。
+
+### 新回退
+
+nb 解码 0.95-0.96x:短帧下内核启动开销占比过高。修法:给 nb 的 filters/ltp
+内核加长度阈值(如 `< 2*VLMAX` 回落标量),预计回到 1.00x 以上。
