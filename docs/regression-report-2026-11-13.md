@@ -20,7 +20,7 @@
 
 ## 2. 真机门禁
 
-### 2.1 SpacemiT X100(<BOARD_HOST>,主机名 k3,Bianbu,当前主目标机)
+### 2.1 SpacemiT X100(<BOARD_HOST>,主机名 k3,<distro>,当前主目标机)
 
 | # | 门禁 | 结果 |
 |---|------|------|

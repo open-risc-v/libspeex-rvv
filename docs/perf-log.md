@@ -1,6 +1,6 @@
 # 真机性能日志(BPMIK102080640200 / SpacemiT X60)
 
-设备:SpacemiT X60(rv64imafdcv,RVV 1.0,VLEN=256,8 核),Bianbu Star 2.1,
+设备:SpacemiT X60(rv64imafdcv,RVV 1.0,VLEN=256,8 核),<distro> Star 2.1,
 内核 6.6.63。工具链:gcc 13.3(Ubuntu 24.04 交叉),`-O2 -march=rv64gcv`,
 静态链接。测试:bench_e2e,4 秒信号,reps=5 取最优;定点构建。
 
@@ -818,7 +818,7 @@ CMakeLists.txt 一处剖析基建修复,不影响库)。
 
 ## 第 26 轮(2026-11-12,新目标机 SpacemiT X100 迁移 + 编译参数定制)
 
-**硬件探测(<BOARD_HOST>,root/<BOARD_PASS>,主机名 k3,Bianbu 2.x 内核
+**硬件探测(<BOARD_HOST>,root/<BOARD_PASS>,主机名 k3,<distro> 2.x 内核
 6.18.3)**:SpacemiT X100 ×8 大核(policy0)@2.15GHz + ×8 小核
 (policy8)@1.8GHz(**16 硬件线程**,nproc 显示 8 是亲和性所致);
 VLEN=256(与 X60 相同);L1d/L1i 64KB/核、L2 4MB;memcpy ~12.9GB/s;
@@ -865,7 +865,7 @@ V2 否决原因:SiFive P600 调度模型与 X100 自研微架构不合,解码
 ## 第 27 轮(2026-11-12,厂商编译器对照实验:K3 优化文档落地)
 
 **K3 优化文档结论**:官方 docs-chip 仓库(docs.spacemit.com 的源)
-只有数据手册级信息;真正可执行的厂商优化意见在 **Bianbu 自带
+只有数据手册级信息;真正可执行的厂商优化意见在 **<distro> 自带
 gcc-15.2.0(bb5 补丁)**:默认 `-mtune=spacemit-x100`(厂商微架构
 调优模型,含 spacemit-a100/x60/x100 三档)、默认
 `-mvector-strict-align=on`。数据手册要点:K3 = 8×X100(四发射乱序,
@@ -1091,7 +1091,7 @@ nb 解码 0.95-0.96x:短帧下内核启动开销占比过高。修法:给 nb 的
 
 ## 第 35 轮(2026-11-19,干净副本重跑,口径固定)
 
-仓库重拉后的独立副本(`/mnt/ssd/work/libspeex-fresh`,与第 34 轮同一提交 c7565bb),
+仓库重拉后的独立副本(`<ssd>/work/libspeex-fresh`,与第 34 轮同一提交 c7565bb),
 重新 cmake 构建 A/B 并复测,用于确认第 34 轮数据不是旧构建残留。
 
 | 模式 | 质量 | A 编码 us/帧 | B 编码 | 编码加速 | A 解码 | B 解码 | 解码加速 |

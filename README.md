@@ -66,7 +66,7 @@ cmake --preset riscv64-x100 && cmake --build build/riscv64-x100 -j
 ## 真机测试(SpacemiT X60 开发板)
 
 目标机 BPMIK102080640200:SpacemiT X60(rv64imafdcv,RVV 1.0,VLEN=256,
-8 核,Bianbu Linux 2.1),通过 adb 连接。`scripts/device-test.sh` 完成
+8 核,<distro> Linux 2.1),通过 adb 连接。`scripts/device-test.sh` 完成
 静态交叉构建、推送、设备端 A/B bit-exact 与基准:
 
 ```bash
@@ -135,7 +135,7 @@ zba/bb/bc/bs + zicond,预设 `riscv64-x100`),真机配对基准编码再
 解码最高 **-53.7%**(uwb q2)。剩余路径:批转码并行(P2,现含
 16 线程)、净环境重测(P3)。
 
-第 27 轮:厂商编译器对照——Bianbu 自带 gcc-15.2(默认
+第 27 轮:厂商编译器对照——<distro> 自带 gcc-15.2(默认
 `-mtune=spacemit-x100`)原生构建位精确但性能全面回退(编码
 -8~-19%、解码 -25~-47%),**维持交叉 gcc-14 为生产工具链**;
 gcc-15 修复了 LTO ICE(待其 RVV 代码生成追平后重测)。A100 为

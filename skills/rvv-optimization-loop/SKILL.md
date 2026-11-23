@@ -1,12 +1,12 @@
 ---
 name: rvv-optimization-loop
-description: 在 RISC-V 真机(SpacemiT X60/Bianbu)上对 libspeex 做 RVV 内核循环优化的标准流程与踩坑清单。当要新增 RVV 内核、真机 A/B bit-exact 验证、adb 部署测试、或遇到 vsetvl/intrinsics/交叉编译相关问题时使用。
+description: 在 RISC-V 真机(SpacemiT X60/<distro>)上对 libspeex 做 RVV 内核循环优化的标准流程与踩坑清单。当要新增 RVV 内核、真机 A/B bit-exact 验证、adb 部署测试、或遇到 vsetvl/intrinsics/交叉编译相关问题时使用。
 ---
 
 # libspeex-rvv 真机优化循环
 
 目标设备:BPMIK102080640200(SpacemiT X60,rv64imafdcv RVV 1.0,VLEN=256,
-Bianbu Linux 2.1,非 Android)。工具链:Ubuntu 24.04 容器内
+<distro> Linux 2.1,非 Android)。工具链:Ubuntu 24.04 容器内
 gcc-riscv64-linux-gnu(gcc 13),`-march=rv64gcv` + 静态链接,adb 推送。
 
 ## 标准循环(每轮一个内核)
@@ -60,7 +60,7 @@ RVV_KERNELS=ON ./scripts/device-test.sh build ab bench
 - 交叉 libc:ubuntu 容器 `--no-install-recommends` 会漏掉
   `libc6-dev-riscv64-cross`(crt1.o/libc.a),静态链接报 cannot find
   crt1.o;动态链接也缺 Scrt1.o。显式安装。
-- 静态 glibc 二进制在 Bianbu 上直接跑,免去 glibc 版本地狱;校验静态用
+- 静态 glibc 二进制在 <distro> 上直接跑,免去 glibc 版本地狱;校验静态用
   `readelf -l | grep INTERP`(容器里没有 `file` 命令)。
 
 ### 内核形状补充(第 5/6 轮)

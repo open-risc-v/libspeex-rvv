@@ -213,7 +213,7 @@ clock_gettime 计时后:
 
 ## 第 27 轮:厂商编译器对照(2026-11-12)
 
-- **Bianbu gcc-15.2(bb5)= 厂商调优编译器**:默认
+- **<distro> gcc-15.2(bb5)= 厂商调优编译器**:默认
   `-mtune=spacemit-x100`、`-mvector-strict-align=on`;调优模型
   spacemit-a100/x60/x100 仅存在于该 fork(Ubuntu gcc-14 没有,
   交叉不可用)。

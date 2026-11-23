@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Build (cross, static) both libspeex trees and run tests/benchmarks on the
-# RISC-V test board over adb (SpacemiT X60, Bianbu Linux).
+# RISC-V test board over adb (SpacemiT X60, <distro> Linux).
 #
 #   ./scripts/device-test.sh build    # docker cross-build, static binaries
 #   ./scripts/device-test.sh deploy   # adb push binaries to the board

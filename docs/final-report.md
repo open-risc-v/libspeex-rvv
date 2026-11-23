@@ -51,7 +51,7 @@
   量化)**逐字节 bit-exact**,含交叉解码(A 编 B 解 / B 编 A 解)。
 - **目标机**:BPMIK102080640200 —— SpacemiT X60 ×8 @1.6GHz(performance
   governor),RVV 1.0 VLEN=256,L1I/L1D 32KB/核,L2 512KB×2 簇,8GB DDR,
-  Bianbu Star 2.1(非 Android,adb 部署到 /tmp/speex-rvv)。
+  <distro> Star 2.1(非 Android,adb 部署到 /tmp/speex-rvv)。
 - **工具链**:gcc-13(riscv64-linux-gnu)静态交叉编译,`-march=rv64gcv`;
   qemu-user(VLEN=128)+ 真机(VLEN=256)双环境验证,天然覆盖不同
   VL 尾路径。
